@@ -26,6 +26,7 @@ runs:
   using: 'composite'
   steps:
     - name: Check Runner OS
+      id: check-runner-os
       if: ${{ runner.os != 'Windows' }}
       shell: pwsh
       run: |
@@ -36,6 +37,7 @@ runs:
     - name: Run the sym parser
       id: run-sym-parser
       shell: pwsh
+      working-directory: ./exe
       run: |
         echo "Root directory:"
         dir
@@ -57,7 +59,7 @@ runs:
         echo "Starting SYM with this list of files:"
         dir
         echo "Invoking sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
-        exe\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
+        sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
         echo "exit-code="+$LastExitCode >> $GITHUB_OUTPUT
         echo "Directory afer processing:"
         dir
