@@ -1,5 +1,6 @@
 name: 'Run sym processor & upload results'
 description: 'Downloads repo, runs the sym parser, and uploads the results'
+
 inputs:
   sym-files-path:
     description: 'Relative path of the sym files'
@@ -18,10 +19,12 @@ inputs:
     required: true
   #python-mode
   #html-mode
+
 outputs:
   exit-code:
     description: 'Exit code'
     value: ${{steps.run-sym-parser.outputs.exit-code}}
+
 runs:
   using: 'composite'
   steps:
@@ -32,22 +35,19 @@ runs:
       run: |
         echo "::error title=⛔ Wrong Platform::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
         exit 1
+
     - name: Pull files from the repo
       uses: actions/checkout@v4  
+
     - name: Run the sym parser
       id: run-sym-parser
       shell: pwsh
       run: |
-        echo "Root directory:"
-        dir
-        echo "Path"
-        Get-ChildItem Env:
-        echo "sym4win found at:"
-        Get-ChildItem -Recurse  \sym4win.exe
         echo "Hello ${{github.actor}}. Found changed sym files in: ${{inputs.sym-files-path}}."
         cd "${{inputs.sym-files-path}}"
         echo "Files in sym directory:"
         dir
+
         $keepFiles = @('*.sym','*.bat','*.sh')
         $filesToDelete = Get-ChildItem *.* -Exclude $keepFiles
         if($filesToDelete.length -gt 0) { 
@@ -57,25 +57,25 @@ runs:
           } else { 
             echo "No extraneous files to delete." 
           }
+
         echo "Starting SYM with this list of files:"
         dir
-        echo "Invoking sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
-        sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
+
+        echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
+        ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
         echo "exit-code="+$LastExitCode >> $GITHUB_OUTPUT
+
         echo "Directory afer processing:"
         dir
 
-    # - name: Push results back to repo
-    #   run: |
-    #     git config --local user.name "${{inputs.git-bot-name}}"
-    #     git config --local user.email "${{inputs.git-bot-email}"
-    #     git fetch
-    #     git add *
-    #     git commit -am "Results of SYM run by ${{github.actor}} on $(date)" 
-    #     git push
-
-
-
+    - name: Push results back to repo
+      run: |
+        git config --local user.name "${{inputs.git-bot-name}}"
+        git config --local user.email "${{inputs.git-bot-email}"
+        git fetch
+        git add *
+        git commit -am "Results of SYM run by ${{github.actor}} on $(date)" 
+        git push
 
 
     # - run: echo Hello ${{ inputs.who-to-greet }}.
