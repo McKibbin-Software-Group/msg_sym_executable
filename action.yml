@@ -27,6 +27,7 @@ runs:
   steps:
     - name: Check Runner OS
       if: ${{ runner.os != 'Windows' }}
+      shell: pwsh
       run: |
         echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
         exit 1
