@@ -25,11 +25,11 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    # - name: Check Runner OS
-    #   if: ${{ runner.os != 'Windows' }}
-    #   run: |
-    #     echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
-    #     exit 1
+    - name: Check Runner OS
+      if: ${{ runner.os != 'Windows' }}
+      run: |
+        echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
+        exit 1
     - name: Pull files from the repo
       uses: actions/checkout@v4  
     - name: Run the sym parser
