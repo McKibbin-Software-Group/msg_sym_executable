@@ -25,16 +25,13 @@ outputs:
     description: 'Exit code'
     value: ${{steps.run-sym-parser.outputs.exit-code}}
 
-defaults:
-  run:
-    shell: pwsh
-
 runs:
   using: 'composite'
   steps:
     - name: Check Runner OS
       id: check-runner-os
       if: ${{ runner.os != 'Windows' }}
+      shell: pwsh
       run: |
         echo "::error title=⛔ Wrong Platform::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
         exit 1
@@ -44,6 +41,7 @@ runs:
 
     - name: Run the sym parser
       id: run-sym-parser
+      shell: pwsh
       run: |
         echo "Hello ${{github.actor}}. Found changed sym files in: ${{inputs.sym-files-path}}."
         cd "${{inputs.sym-files-path}}"
@@ -74,6 +72,7 @@ runs:
         dir
 
     - name: Push results back to repo
+      shell: pwsh
       run: |
         git config --local user.name "${{inputs.git-bot-name}}"
         git config --local user.email "${{inputs.git-bot-email}}"
