@@ -25,13 +25,16 @@ outputs:
     description: 'Exit code'
     value: ${{steps.run-sym-parser.outputs.exit-code}}
 
+defaults:
+  run:
+    shell: pwsh
+
 runs:
   using: 'composite'
   steps:
     - name: Check Runner OS
       id: check-runner-os
       if: ${{ runner.os != 'Windows' }}
-      shell: pwsh
       run: |
         echo "::error title=⛔ Wrong Platform::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
         exit 1
@@ -41,7 +44,6 @@ runs:
 
     - name: Run the sym parser
       id: run-sym-parser
-      shell: pwsh
       run: |
         echo "Hello ${{github.actor}}. Found changed sym files in: ${{inputs.sym-files-path}}."
         cd "${{inputs.sym-files-path}}"
@@ -65,6 +67,9 @@ runs:
         ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
         echo "exit-code="+$LastExitCode >> $GITHUB_OUTPUT
 
+        echo "Output:"
+        echo $GITHUB_OUTPUT
+
         echo "Directory afer processing:"
         dir
 
@@ -76,15 +81,4 @@ runs:
         git add *
         git commit -am "Results of SYM run by ${{github.actor}} on $(date)" 
         git push
-
-
-    # - run: echo Hello ${{ inputs.who-to-greet }}.
-    #   shell: bash
-    # - id: random-number-generator
-    #   run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-    #   shell: bash
-    # - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-    #   shell: bash
-    # - run: goodbye.sh
-    #   shell: bash
 
