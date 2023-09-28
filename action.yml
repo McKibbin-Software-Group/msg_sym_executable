@@ -63,10 +63,9 @@ runs:
 
         echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
         ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
-        echo "exit-code="+$LastExitCode >> $GITHUB_OUTPUT
-
-        echo "Output:"
-        echo $GITHUB_OUTPUT
+        $exitCodeText = "exit-code="+$LastExitCode 
+        echo $exitCodeText >> $GITHUB_OUTPUT
+        echo $exitCodeText
 
         echo "Directory afer processing:"
         dir
