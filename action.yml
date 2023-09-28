@@ -1,6 +1,5 @@
 name: 'Run sym processor & upload results'
 description: 'Downloads repo, runs the sym parser, and uploads the results'
-
 inputs:
   sym-files-path:
     description: 'Relative path of the sym files'
@@ -19,20 +18,18 @@ inputs:
     required: true
   #python-mode
   #html-mode
-  
 outputs:
   exit-code:
-    description: "Exit code"
-    value: ${{ steps.run-sym-parser.outputs.exit-code }}
-
+    description: 'Exit code'
+    value: ${{steps.run-sym-parser.outputs.exit-code}}
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - name: Check Runner OS
-      if: ${{ runner.os != 'Windows' }}
-      run: |
-        echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
-        exit 1
+    # - name: Check Runner OS
+    #   if: ${{ runner.os != 'Windows' }}
+    #   run: |
+    #     echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
+    #     exit 1
     - name: Pull files from the repo
       uses: actions/checkout@v4  
     - name: Run the sym parser
