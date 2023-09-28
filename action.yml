@@ -30,17 +30,18 @@ runs:
       if: ${{ runner.os != 'Windows' }}
       shell: pwsh
       run: |
-        echo "::error title=⛔ error hint::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
+        echo "::error title=⛔ Wrong Platform::Supports Windows Only - change 'runs-on:' to '[windows-latest]'"
         exit 1
     - name: Pull files from the repo
       uses: actions/checkout@v4  
     - name: Run the sym parser
       id: run-sym-parser
       shell: pwsh
-      working-directory: ./exe
       run: |
         echo "Root directory:"
         dir
+        echo "Path"
+        echo $path
         echo "sym4win found at:"
         Get-ChildItem -Recurse  \sym4win.exe
         echo "Hello ${{github.actor}}. Found changed sym files in: ${{inputs.sym-files-path}}."
