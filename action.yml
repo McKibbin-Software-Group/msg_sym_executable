@@ -71,7 +71,7 @@ runs:
     - name: Push results back to repo
       run: |
         git config --local user.name "${{inputs.git-bot-name}}"
-        git config --local user.email "${{inputs.git-bot-email}"
+        git config --local user.email "${{inputs.git-bot-email}}"
         git fetch
         git add *
         git commit -am "Results of SYM run by ${{github.actor}} on $(date)" 
