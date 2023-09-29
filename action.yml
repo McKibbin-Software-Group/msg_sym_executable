@@ -1,6 +1,11 @@
 name: 'Run sym processor & upload results'
 description: 'Downloads repo, runs the sym parser, and uploads the results'
 
+author: 'Armin Aschoff'
+branding:
+  icon: 'cpu'
+  color: 'green'
+
 inputs:
   sym-files-path:
     description: 'Relative path of the sym files'
