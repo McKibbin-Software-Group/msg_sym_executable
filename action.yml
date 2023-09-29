@@ -72,7 +72,7 @@ runs:
         echo "Starting SYM with this list of files:"
         dir
 
-        if ("${{python-mode}}" -eq "yes") {
+        if ("${{inputs.python-mode}}" -eq "yes") {
           echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
           ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
           $pythonExitCodeText = "python-exit-code="+$LastExitCode 
@@ -80,7 +80,7 @@ runs:
           echo $pythonExitCodeText
         }
 
-        if ("${{html-mode}}" -eq "yes") {
+        if ("${{inputs.html-mode}}" -eq "yes") {
           echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}"
           ${{github.action_path}}\executable\sym4win.exe -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}
           $htmlExitCodeText = "html-exit-code="+$LastExitCode 
