@@ -28,16 +28,15 @@ inputs:
     required: true
   
 
-outputs:
-  python-exit-code:
-    description: 'Exit code of sym python run'
-    value: ${{runs.steps.run-sym-parser.outputs.pythonExitCode}}
-  html-exit-code:
-    description: 'Exit code of sym html run'
-    value: ${{runs.steps.run-sym-parser.outputs.htmlExitCode}}
-
 runs:
   using: 'composite'
+  outputs:
+    python-exit-code:
+      description: 'Exit code of sym python run'
+      value: ${{steps.run-sym-parser.outputs.pythonExitCode}}
+    html-exit-code:
+      description: 'Exit code of sym html run'
+      value: ${{steps.run-sym-parser.outputs.htmlExitCode}}
   steps:
     - name: Check Runner OS
       id: check-runner-os
