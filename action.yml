@@ -27,16 +27,16 @@ inputs:
     description: 'Run sym with -html switch'
     required: true
   
+outputs:
+  python-exit-code:
+    description: 'Exit code of sym python run'
+    value: ${{steps.run-sym-parser.outputs.pythonExitCode}}
+  html-exit-code:
+    description: 'Exit code of sym html run'
+    value: ${{steps.run-sym-parser.outputs.htmlExitCode}}
 
 runs:
   using: 'composite'
-  outputs:
-    python-exit-code:
-      description: 'Exit code of sym python run'
-      value: ${{steps.run-sym-parser.outputs.pythonExitCode}}
-    html-exit-code:
-      description: 'Exit code of sym html run'
-      value: ${{steps.run-sym-parser.outputs.htmlExitCode}}
   steps:
     - name: Check Runner OS
       id: check-runner-os
@@ -76,7 +76,7 @@ runs:
           ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
           # $pythonExitCodeText = 'pythonExitCode="'+$LastExitCode+'"'
           $pythonExitCodeText = 'pythonExitCode=dog'
-          echo $pythonExitCodeText >> "$GITHUB_OUTPUT"
+          echo $pythonExitCodeText >> $env:GITHUB_OUTPUT
           echo $pythonExitCodeText
         }
 
@@ -85,7 +85,7 @@ runs:
           ${{github.action_path}}\executable\sym4win.exe -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}
           # $htmlExitCodeText = 'htmlExitCode="'+$LastExitCode+'"' 
           $htmlExitCodeText = "htmlExitCode=cat"
-          echo "$htmlExitCodeText" >> "$GITHUB_OUTPUT"
+          echo "$htmlExitCodeText" >> $env:GITHUB_OUTPUT
           echo $htmlExitCodeText
         }
 
