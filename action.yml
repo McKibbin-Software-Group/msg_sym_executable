@@ -85,7 +85,7 @@ runs:
           echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}"
           ${{github.action_path}}\executable\sym4win.exe -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}
           # $htmlExitCodeText = 'html-exit-code="'+$LastExitCode+'"' 
-          $htmlExitCodeText = 'html-exit-code=cat
+          $htmlExitCodeText = 'html-exit-code=cat'
           echo $htmlExitCodeText >> $GITHUB_OUTPUT
           echo $htmlExitCodeText
         }
