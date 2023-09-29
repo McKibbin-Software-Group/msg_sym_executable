@@ -10,20 +10,29 @@ inputs:
     required: true
   main-python-model-filename:
     description: 'Main python model filename, passed to sym processor command line'
-    required: true
+  main-html-model-filename:
+    description: 'Main html model filename, passed to sym processor command line'
   git-bot-name:
     description: 'Name to use for git push'
     required: true
   git-bot-email:
     description: 'email address to use for git push'
     required: true
-  #python-mode
-  #html-mode
+  python-mode:
+    description: 'Run sym with -python switch'
+    required: true
+  html-mode:
+    description: 'Run sym with -html switch'
+    required: true
+  
 
 outputs:
-  exit-code:
-    description: 'Exit code'
-    value: ${{steps.run-sym-parser.outputs.exit-code}}
+  python-exit-code:
+    description: 'Exit code of sym python run'
+    value: ${{steps.run-sym-parser.outputs.python-exit-code}}
+  html-exit-code:
+    description: 'Exit code of sym html run'
+    value: ${{steps.run-sym-parser.outputs.html-exit-code}}
 
 runs:
   using: 'composite'
@@ -51,21 +60,31 @@ runs:
         $keepFiles = @('*.sym','*.bat','*.sh')
         $filesToDelete = Get-ChildItem *.* -Exclude $keepFiles
         if($filesToDelete.length -gt 0) { 
-            echo "Will delete these extraneous files first:"
-            $filesToDelete
-            Remove-Item $filesToDelete
-          } else { 
-            echo "No extraneous files to delete." 
-          }
+          echo "Will delete these extraneous files first:"
+          $filesToDelete
+          Remove-Item $filesToDelete
+        } else { 
+          echo "No extraneous files to delete." 
+        }
 
         echo "Starting SYM with this list of files:"
         dir
 
-        echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
-        ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
-        $exitCodeText = "exit-code="+$LastExitCode 
-        echo $exitCodeText >> $GITHUB_OUTPUT
-        echo $exitCodeText
+        if ("${{python-mode}}" -eq "yes") {
+          echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}"
+          ${{github.action_path}}\executable\sym4win.exe -python ${{inputs.main-sym-filename}} ${{inputs.main-python-model-filename}}
+          $pythonExitCodeText = "python-exit-code="+$LastExitCode 
+          echo $pythonExitCodeText >> $GITHUB_OUTPUT
+          echo $pythonExitCodeText
+        }
+
+        if ("${{html-mode}}" -eq "yes") {
+          echo "Invoking ${{github.action_path}}\executable\sym4win.exe with the following parameters: -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}"
+          ${{github.action_path}}\executable\sym4win.exe -html ${{inputs.main-sym-filename}} ${{inputs.main-html-model-filename}}
+          $htmlExitCodeText = "html-exit-code="+$LastExitCode 
+          echo $htmlExitCodeText >> $GITHUB_OUTPUT
+          echo $htmlExitCodeText
+        }
 
         echo "Directory afer processing:"
         dir
