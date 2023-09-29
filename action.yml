@@ -10,8 +10,10 @@ inputs:
     required: true
   main-python-model-filename:
     description: 'Main python model filename, passed to sym processor command line'
+    required: true
   main-html-model-filename:
     description: 'Main html model filename, passed to sym processor command line'
+    required: true
   git-bot-name:
     description: 'Name to use for git push'
     required: true
