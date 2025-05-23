@@ -1,3 +1,5 @@
+**This repository is now obsolete**
+
 # msg_sym_executable
 SYM executable 
 
